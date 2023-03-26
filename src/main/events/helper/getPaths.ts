@@ -20,17 +20,17 @@ export const getPaths = (e: IpcMainInvokeEvent, word = '') => {
     })
     .sort((p1, p2) => p2.matchs - p1.matchs)
     .filter(isMatchPath)
-  function getMatchLevel(fName = '', sWord = '') {
-    fName = normalizeStr(fName)
-    sWord = normalizeStr(sWord)
-    const mcl = maxCommonLength(fName, sWord)
-    // 当最长公共子序列长度相同的时候,需要让最前匹配到的在前面
-    const include = fName.includes(word) ? fName.length - fName.indexOf(word) : 0
-    return mcl + include
-  }
+
   return paths
 }
-
+function getMatchLevel(fileName = '', word = '') {
+  fileName = normalizeStr(fileName)
+  word = normalizeStr(word)
+  if (fileName.includes(word)) return 100 - fileName.indexOf(word)
+  const mcl = maxCommonLength(fileName, word)
+  // 当没有匹配项的时候,返回最长公共子序列的长度
+  return mcl
+}
 function maxCommonLength(str1 = '1234', str2 = '321') {
   if (!str1.length || !str2.length) return 0
   if (str1[0] === str2[0]) {

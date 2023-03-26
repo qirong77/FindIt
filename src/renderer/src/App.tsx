@@ -17,12 +17,11 @@ export const App = () => {
     } else {
       timer = window.setTimeout(() => {
         window.api.interProcess(GET_SEARCH_RESULTS, search).then((files) => {
-          console.log(files)
           setFiles(files.slice(0, 3))
           setActive(0)
         })
         timer = null
-      }, 200)
+      }, 120)
     }
   }, [search])
 

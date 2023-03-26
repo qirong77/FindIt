@@ -6,7 +6,7 @@ import { W_WIDTH } from '../config'
 export function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
     width: W_WIDTH,
-    height: 150,
+    height: 50,
     show: true,
     type: 'toolbar',
     autoHideMenuBar: true,
