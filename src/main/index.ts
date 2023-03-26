@@ -1,9 +1,9 @@
-import { onEvents } from './events/index';
-import { app, BrowserWindow, globalShortcut } from 'electron'
+import { onEvents } from './events/index'
+import { app, BrowserWindow, globalShortcut, Menu, Tray } from 'electron'
 
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow } from './electron/createWindow'
-
+let tray
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -17,9 +17,20 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
   const mainWindow = createWindow()
   onEvents()
+  const tray = new Tray('/Users/qirong77/Desktop/findIt/build/umbrellaTemplate.png')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Item1', type: 'radio', checked: true },
+    {
+      label: '退出App',
+      click() {
+        console.log('1')
+      }
+    }
+  ])
+  tray.setToolTip('findIt')
+  tray.setContextMenu(contextMenu)
   globalShortcut.register('Alt+Space', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })
