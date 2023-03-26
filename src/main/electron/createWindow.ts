@@ -1,10 +1,11 @@
 import { is } from '@electron-toolkit/utils'
 import { BrowserWindow, shell } from 'electron'
 import path from 'path'
+import { W_WIDTH } from '../config'
 
 export function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
-    width: 650,
+    width: W_WIDTH,
     height: 150,
     show: true,
     type: 'toolbar',
@@ -18,8 +19,6 @@ export function createWindow(): BrowserWindow {
       sandbox: false
     }
   })
-  mainWindow.on('ready-to-show', () => {})
-  // mainWindow.webContents.openDevTools()
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }

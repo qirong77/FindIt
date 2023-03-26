@@ -3,7 +3,6 @@ import { exec } from 'child_process'
 import { BrowserWindow } from 'electron'
 import { IFile } from '../../../common/types'
 export const openFile = (e: Electron.IpcMainEvent, file: IFile) => {
-  console.log(file)
   if (file.isApp) {
     exec(`open ${file.filePath.replaceAll(' ','\\ ')}`)
   } else {

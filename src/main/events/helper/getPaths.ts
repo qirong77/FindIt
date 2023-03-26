@@ -1,5 +1,4 @@
-
-import { readdirSync, } from 'fs'
+import { readdirSync } from 'fs'
 import { basename, join } from 'path'
 
 import { IpcMainInvokeEvent } from 'electron'
@@ -8,20 +7,27 @@ import { pinyin } from 'pinyin'
 import { IFile } from '../../../common/types'
 const allPaths = getAllPaths()
 export const getPaths = (e: IpcMainInvokeEvent, word = '') => {
-  getWindow(e)?.setSize(600, 500)
+  getWindow(e)?.setSize(600, 300)
   const paths: IFile[] = allPaths
-    .map(filePath => {
+    .map((filePath) => {
       const fileName = basename(filePath)
-      const matchs = maxCommonLength(normalizeStr(fileName), normalizeStr(word))
       return {
         fileName,
         filePath,
         isApp: /\.app/i.test(fileName),
-        matchs: normalizeStr(fileName).includes(normalizeStr(word)) ? 1 + matchs: matchs
+        matchs: getMatchLevel(fileName, word)
       }
     })
     .sort((p1, p2) => p2.matchs - p1.matchs)
     .filter(isMatchPath)
+  function getMatchLevel(fName = '', sWord = '') {
+    fName = normalizeStr(fName)
+    sWord = normalizeStr(sWord)
+    const mcl = maxCommonLength(fName, sWord)
+    // 当最长公共子序列长度相同的时候,需要让最前匹配到的在前面
+    const include = fName.includes(word) ? fName.length - fName.indexOf(word) : 0
+    return mcl + include
+  }
   return paths
 }
 
@@ -42,23 +48,23 @@ function normalizeStr(str = '') {
     .join('')
     .toLowerCase()
 }
-
+// 获取所有的路径
 function getAllPaths() {
-  const targets = [
-    '/System/Applications/Utilities',
-    '/Applications',
-    '/Users/qirong77/Desktop/projects'
-  ]
+  const targets = ['/Applications', '/Users/qirong77/Desktop/projects']
   const paths: string[] = []
-  targets.forEach(dir => {
-    readdirSync(dir).forEach(fileName => {
+  targets.forEach((dir) => {
+    readdirSync(dir).forEach((fileName) => {
       const path = join(dir, fileName)
       paths.push(path)
     })
   })
+  paths.push(
+    '/System/Applications/Utilities/Terminal.app',
+    '/Users/qirong77/Desktop/front-end-road/Markdowns'
+  )
   return paths
 }
 
 function isMatchPath(iFile: IFile) {
-  return /^[^\.].*$/.test(iFile.fileName) && iFile.matchs >= 2
+  return /^[^\.].*$/.test(iFile.fileName)
 }

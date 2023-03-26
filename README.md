@@ -1,6 +1,7 @@
 # findit
 
 An Electron application with React and TypeScript
+快
 
 ## Recommended IDE Setup
 

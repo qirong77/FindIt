@@ -11,13 +11,19 @@ export const App = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     if (timer || status !== 0) return
-    timer = window.setTimeout(() => {
-      window.api.interProcess(GET_SEARCH_RESULTS, search).then((files) => {
-        setFiles(files.slice(0, 3))
-        setActive(0)
-      })
-      timer = null
-    }, 800)
+    if (!search) {
+      window.api.sendToMain(SET_WINDOW_SIZE, 50)
+      setFiles([])
+    } else {
+      timer = window.setTimeout(() => {
+        window.api.interProcess(GET_SEARCH_RESULTS, search).then((files) => {
+          console.log(files)
+          setFiles(files.slice(0, 3))
+          setActive(0)
+        })
+        timer = null
+      }, 200)
+    }
   }, [search])
 
   useEffect(() => {
@@ -36,19 +42,17 @@ export const App = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      {files.map((file, i) => (
-        <ul className="pl-[10px] my-[6px]" key={i}>
+      <ul className="px-[10px] my-[6px]">
+        {files.map((file, i) => (
           <li
-            className={`flex items-center  ${
-              file.fileName === files[active]?.fileName ? 'active-li' : ''
-            }`}
+            className={`flex items-center  ${i === active ? 'active-li' : ''}`}
             key={file.fileName}
           >
             {file.isApp ? <AppIcon /> : <FileIcon />}
             <span>{file.fileName}</span>
           </li>
-        </ul>
-      ))}
+        ))}
+      </ul>
     </div>
   )
 
@@ -61,7 +65,6 @@ export const App = () => {
         ? setActive(files.length - 1)
         : setActive(active + 1 > files.length - 1 ? 0 : active + 1)
     }
-    console.log(e.key)
     if (e.key === 'Tab') {
       status === 0 ? setStatus(1) : setStatus(0)
       setFiles([])
@@ -77,6 +80,7 @@ export const App = () => {
       if (status === 1) {
         window.api.sendToMain(GOOGLE, search)
       }
+      setSearch('')
     }
   }
 }
