@@ -21,7 +21,7 @@ export const App = () => {
           setActive(0)
         })
         timer = null
-      }, 120)
+      }, 80)
     }
   }, [search])
 
