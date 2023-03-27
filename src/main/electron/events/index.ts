@@ -1,6 +1,6 @@
-import { W_WIDTH } from './../config/index';
+import { W_WIDTH } from '../../config/index';
 import { ipcMain } from 'electron'
-import { GET_SEARCH_RESULTS, GOOGLE, OPEN_FILE, SET_WINDOW_SIZE } from '../../common/const'
+import { GET_SEARCH_RESULTS, GOOGLE, OPEN_FILE, SET_WINDOW_SIZE } from '../../../common/const'
 import { getPaths } from './helper/getPaths'
 import { google } from './helper/google'
 import { getWindow, openFile } from './helper/openFile'

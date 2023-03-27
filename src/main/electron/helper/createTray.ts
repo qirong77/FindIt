@@ -1,4 +1,5 @@
 import { app, Menu, Tray } from 'electron'
+import { updateStorePaths } from '../store'
 
 export const createTray = () => {
   const tray = new Tray('/Users/qirong77/Desktop/projects/findIt/build/umbrellaTemplate.png')
@@ -8,6 +9,12 @@ export const createTray = () => {
       label: '退出App',
       click() {
         app.quit()
+      }
+    },
+    {
+      label: '重新加载查询数据',
+      click() {
+        updateStorePaths()
       }
     }
   ])

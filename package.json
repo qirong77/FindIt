@@ -22,6 +22,7 @@
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
+    "electron-store": "^8.1.0",
     "pinyin": "^3.0.0-alpha.5"
   },
   "devDependencies": {

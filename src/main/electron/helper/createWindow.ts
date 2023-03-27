@@ -1,7 +1,7 @@
 import { is } from '@electron-toolkit/utils'
 import { BrowserWindow, shell } from 'electron'
 import path from 'path'
-import { W_WIDTH } from '../config'
+import { W_WIDTH } from '../../config'
 
 export function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({

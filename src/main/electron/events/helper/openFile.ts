@@ -1,9 +1,9 @@
 import { exec } from 'child_process'
 
 import { BrowserWindow } from 'electron'
-import { IFile } from '../../../common/types'
+import { IFile } from '../../../../common/types'
 export const openFile = (e: Electron.IpcMainEvent, file: IFile) => {
-  if (file.isApp) {
+  if (/\.app/.test(file.fileName)) {
     exec(`open ${file.filePath.replaceAll(' ','\\ ')}`)
   } else {
     const appName = 'Visual Studio Code'
