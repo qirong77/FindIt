@@ -1,7 +1,7 @@
 # findit
 
 An Electron application with React and TypeScript
-快
+mac上快速启动App/文件的App
 
 ## Recommended IDE Setup
 

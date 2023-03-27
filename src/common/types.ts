@@ -1,6 +1,7 @@
+export type FileType = 'App' | 'Folder' | 'File'
 export interface IFile {
-    fileName:string,
-    filePath:string,
-    isApp:Boolean,
-    matchs:number
+  fileName: string
+  filePath: string
+  type: FileType
+  matchs: number
 }

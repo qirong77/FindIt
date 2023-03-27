@@ -1,3 +1,4 @@
+import { getItemType } from './../../../common/getItemType'
 import { readdirSync } from 'fs'
 import { basename, join } from 'path'
 
@@ -14,12 +15,11 @@ export const getPaths = (e: IpcMainInvokeEvent, word = '') => {
       return {
         fileName,
         filePath,
-        isApp: /\.app/i.test(fileName),
+        type: getItemType(filePath),
         matchs: getMatchLevel(fileName, word)
       }
     })
     .sort((p1, p2) => p2.matchs - p1.matchs)
-    .filter(isMatchPath)
 
   return paths
 }
@@ -54,17 +54,16 @@ function getAllPaths() {
   const paths: string[] = []
   targets.forEach((dir) => {
     readdirSync(dir).forEach((fileName) => {
+      if(/^[\.].*$/.test(fileName)) return
       const path = join(dir, fileName)
       paths.push(path)
     })
   })
   paths.push(
     '/System/Applications/Utilities/Terminal.app',
-    '/Users/qirong77/Desktop/front-end-road/Markdowns'
+    '/Users/qirong77/Desktop/front-end-road/Markdowns',
+    '/Users/qirong77/.zshrc'
   )
   return paths
 }
 
-function isMatchPath(iFile: IFile) {
-  return /^[^\.].*$/.test(iFile.fileName)
-}

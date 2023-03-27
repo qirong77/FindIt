@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { IFile } from 'src/common/types'
 import { GET_SEARCH_RESULTS, GOOGLE, OPEN_FILE, SET_WINDOW_SIZE } from '../../common/const'
-import { AppIcon, FileIcon, GoogleIcon, SearchIcon } from './icons'
+import { AppIcon, FileIcon, FolderIcon, GoogleIcon, SearchIcon } from './icons'
 let timer
 export const App = () => {
   const [search, setSearch] = useState('')
@@ -47,8 +47,14 @@ export const App = () => {
             className={`flex items-center  ${i === active ? 'active-li' : ''}`}
             key={file.fileName}
           >
-            {file.isApp ? <AppIcon /> : <FileIcon />}
-            <span>{file.fileName}</span>
+            {file.type === 'App' ? (
+              <AppIcon />
+            ) : file.type === 'Folder' ? (
+              <FolderIcon />
+            ) : (
+              <FileIcon />
+            )}
+            <span>{file.fileName.replace('.app', '')}</span>
           </li>
         ))}
       </ul>
