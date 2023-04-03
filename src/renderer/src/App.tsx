@@ -16,12 +16,12 @@ export const App = () => {
       setFiles([])
     } else {
       timer = window.setTimeout(() => {
-        window.api.interProcess(GET_SEARCH_RESULTS, search).then((files) => {
+        window.api.interProcess(GET_SEARCH_RESULTS, inputRef.current?.value).then((files) => {
           setFiles(files.slice(0, 3))
           setActive(0)
         })
         timer = null
-      }, 80)
+      }, 500)
     }
   }, [search])
 
@@ -33,6 +33,7 @@ export const App = () => {
       <div className="flex pl-[14px]  items-center h-[50px]  border-1 border-slate-400">
         {status === 0 ? <SearchIcon /> : <GoogleIcon />}
         <input
+          autoFocus
           ref={inputRef}
           onKeyDown={handleKeyDown}
           className="w-5/6 mx-4 pl-[4px] h-3/5 text-lg"
@@ -40,6 +41,7 @@ export const App = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        {search}
       </div>
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
