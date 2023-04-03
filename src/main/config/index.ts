@@ -20,7 +20,7 @@ export function getAllPaths() {
   paths.push(
     '/System/Applications/Utilities/Terminal.app',
     '/Users/qirong77/Desktop/front-end-road/Markdowns',
-    '/Users/qirong77/.zshrc'
+    '/Users/qirong77/.zshrc',
   )
   return paths
 }

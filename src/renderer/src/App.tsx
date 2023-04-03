@@ -21,7 +21,7 @@ export const App = () => {
           setActive(0)
         })
         timer = null
-      }, 500)
+      }, 100)
     }
   }, [search])
 
@@ -41,7 +41,6 @@ export const App = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        {search}
       </div>
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
