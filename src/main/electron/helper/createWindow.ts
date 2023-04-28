@@ -1,19 +1,17 @@
 import { is } from '@electron-toolkit/utils'
 import { BrowserWindow, shell } from 'electron'
 import path from 'path'
-import { W_WIDTH } from '../../config'
 
 export function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
-    width: W_WIDTH,
+    width: 660,
     height: 50,
     show: true,
     type: 'toolbar',
     autoHideMenuBar: true,
-    frame: false,
-    opacity: 0.86,
     alwaysOnTop: true,
     skipTaskbar: true,
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
       sandbox: false

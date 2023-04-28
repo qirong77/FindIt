@@ -1,12 +1,12 @@
-import { globalShortcut, app } from 'electron'
+import { globalShortcut } from 'electron'
 import { onEvents } from './events'
 import { createTray } from './helper/createTray'
 import { createWindow } from './helper/createWindow'
 let tray
 export const initailizeApp = () => {
-  hanldeSettings()
   onEvents()
   const mainWindow = createWindow()
+  mainWindow.webContents.openDevTools()
   // 在全屏模式可见,会隐藏左上角的菜单栏
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   mainWindow.setAlwaysOnTop(true, 'floating', 1)
@@ -20,4 +20,3 @@ export const initailizeApp = () => {
   })
 }
 
-function hanldeSettings() {}

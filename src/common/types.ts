@@ -1,7 +1,5 @@
-export type FileType = 'App' | 'Folder' | 'File'
-export interface IFile {
+export interface FindItFile {
   fileName: string
   filePath: string
-  type: FileType
-  matchs: number
+  type: 'app' | 'vscode' | 'finder'
 }

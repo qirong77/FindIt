@@ -1,8 +1,8 @@
 import { exec } from 'child_process'
 
 import { BrowserWindow } from 'electron'
-import { IFile } from '../../../../common/types'
-export const openFile = (e: Electron.IpcMainEvent, file: IFile) => {
+import { FindItFile } from '../../../../common/types'
+export const openFile = (e: Electron.IpcMainEvent, file: FindItFile) => {
   if (/\.app/.test(file.fileName)) {
     exec(`open ${file.filePath.replaceAll(' ', '\\ ')}`)
   } else {

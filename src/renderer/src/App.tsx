@@ -1,59 +1,64 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { IFile } from 'src/common/types'
-import { GET_SEARCH_RESULTS, GOOGLE, OPEN_FILE, SET_WINDOW_SIZE } from '../../common/const'
-import { AppIcon, FileIcon, FolderIcon, GoogleIcon, SearchIcon } from './icons'
-let timer
+import { FindItFile } from 'src/common/types'
+import { GET_ALL_FILES, OPEN_FILE, SET_WINDOW_SIZE } from '../../common/const'
+import { AppIcon, FinderIcon, SearchIcon, VsCodeIcon } from './icons'
+import debounce from 'debounce'
+import pinyin from 'pinyin'
 export const App = () => {
-  const [search, setSearch] = useState('')
-  const [files, setFiles] = useState<IFile[]>([])
+  const [allFiles, setAllFiles] = useState<FindItFile[]>([])
+  const [files, setFiles] = useState<FindItFile[]>([])
   const [active, setActive] = useState(0)
-  const [status, setStatus] = useState(0)
-  const inputRef = useRef<HTMLInputElement>(null)
-  useEffect(() => {
-    if (timer || status !== 0) return
-    if (!search) {
-      window.api.sendToMain(SET_WINDOW_SIZE, 50)
-      setFiles([])
-    } else {
-      timer = window.setTimeout(() => {
-        window.api.interProcess(GET_SEARCH_RESULTS, inputRef.current?.value).then((files) => {
-          setFiles(files.slice(0, 6))
-          setActive(0)
-        })
-        timer = null
-      }, 100)
-    }
-  }, [search])
+  const handleChange = debounce((e) => {
+    const search = e.target.value as string
+    window.api.sendToMain(SET_WINDOW_SIZE, search ? 240 : 50)
 
+    if (!search) {
+      setFiles([])
+      return
+    }
+    const maths = allFiles
+      .map((file) => ({
+        ...file,
+        match: getMatchLevel(file.fileName, search)
+      }))
+      .sort((f1, f2) => f2.match - f1.match)
+    setFiles(maths.slice(0, 5))
+  }, 100)
   useEffect(() => {
-    inputRef.current?.focus()
+    window.api.interProcess(GET_ALL_FILES).then((files) => {
+      setAllFiles(files)
+    })
   }, [])
   return (
     <div className="container min-w-sm">
-      <div className="flex pl-[14px]  items-center h-[50px]  border-1 border-slate-400">
-        {status === 0 ? <SearchIcon /> : <GoogleIcon />}
+      <div
+        className={`flex pl-[20px] w-[100vw] items-center h-[50px] border-b-[1px] ${
+          files.length ? 'border-slate-300' : 'border-transparent'
+        } `}
+      >
+        <SearchIcon />
         <input
           autoFocus
-          ref={inputRef}
           onKeyDown={handleKeyDown}
-          className="w-5/6 mx-4 pl-[4px] h-3/5 text-lg"
+          onChange={handleChange}
+          className="mx-4 pl-[4px] h-full text-xl outline-none"
           type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
           <li
-            className={`flex items-center  ${i === active ? 'active-li' : ''}`}
-            key={file.fileName}
+            className={`flex [&>svg]:mx-[6px] [&>svg]:w-[18px] [&>svg]:h-[18px] items-center  h-[30px] ${
+              i === active ? 'active-li' : ''
+            }`}
+            key={file.filePath + file.type}
           >
-            {file.type === 'App' ? (
+            {file.type === 'app' ? (
               <AppIcon />
-            ) : file.type === 'Folder' ? (
-              <FolderIcon />
+            ) : file.type === 'vscode' ? (
+              <VsCodeIcon />
             ) : (
-              <FileIcon />
+              <FinderIcon />
             )}
             <span>{file.fileName.replace('.app', '')}</span>
           </li>
@@ -71,22 +76,37 @@ export const App = () => {
         ? setActive(files.length - 1)
         : setActive(active + 1 > files.length - 1 ? 0 : active + 1)
     }
-    if (e.key === 'Tab') {
-      status === 0 ? setStatus(1) : setStatus(0)
-      setFiles([])
-      window.api.sendToMain(SET_WINDOW_SIZE, 50)
-    }
     if (e.key === 'Enter') {
-      if (status === 0 && search) {
+      search &&
         window.api.sendToMain(OPEN_FILE, {
           ...files[active],
           search
         })
-      }
-      if (status === 1) {
-        window.api.sendToMain(GOOGLE, search)
-      }
       setSearch('')
     }
+  }
+}
+function getMatchLevel(fileName = '', word = '') {
+  fileName = normalizeStr(fileName)
+  word = normalizeStr(word)
+  if (fileName.includes(word)) return 100 - fileName.indexOf(word)
+  const mcl = maxCommonLength(fileName, word)
+  // 当没有匹配项的时候,返回最长公共子序列的长度
+  return mcl
+  function normalizeStr(str = '') {
+    return pinyin(str, {
+      style: 'normal'
+    })
+      .join('')
+      .toLowerCase()
+  }
+  function maxCommonLength(str1 = '1234', str2 = '321') {
+    if (!str1.length || !str2.length) return 0
+    if (str1[0] === str2[0]) {
+      return maxCommonLength(str1.slice(1), str2.slice(1)) + 1
+    }
+    const case1 = maxCommonLength(str1.slice(1), str2)
+    const case2 = maxCommonLength(str1.slice(), str2.slice(1))
+    return Math.max(case1, case2)
   }
 }
