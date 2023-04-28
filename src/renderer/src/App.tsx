@@ -10,6 +10,7 @@ export const App = () => {
   const [active, setActive] = useState(0)
   const iptRef = useRef<HTMLInputElement>(null)
   const handleChange = debounce((e) => {
+    setActive(0)
     const search = e.target.value as string
     window.api.sendToMain(SET_WINDOW_SIZE, search ? 240 : 50)
     if (!search) {

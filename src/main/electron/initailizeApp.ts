@@ -1,9 +1,17 @@
-import { globalShortcut } from 'electron'
+import { globalShortcut, app } from 'electron'
 import { onEvents } from './events'
 import { createTray } from './helper/createTray'
 import { createWindow } from './helper/createWindow'
+import AutoLaunch from 'auto-launch'
 let tray
 export const initailizeApp = () => {
+  const autoLunch = new AutoLaunch({
+    name: '',
+    path: app.getAppPath()
+  })
+  autoLunch.isEnabled().then((isEnable) => {
+    !isEnable && autoLunch.isEnabled
+  })
   onEvents()
   const mainWindow = createWindow()
   // 在全屏模式可见,会隐藏左上角的菜单栏
@@ -18,4 +26,3 @@ export const initailizeApp = () => {
     mainWindow.hide()
   })
 }
-
