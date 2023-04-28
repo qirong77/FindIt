@@ -22,11 +22,13 @@
   "dependencies": {
     "@electron-toolkit/preload": "^1.0.2",
     "@electron-toolkit/utils": "^1.0.2",
+    "auto-launch": "^5.0.5",
     "electron-store": "^8.1.0",
     "pinyin": "^3.0.0-alpha.5"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/auto-launch": "^5.0.2",
     "@types/node": "16.11.22",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",

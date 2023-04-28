@@ -3,6 +3,7 @@ import { app, BrowserWindow } from 'electron'
 
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow } from './electron/helper/createWindow'
+
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.electron')
   // Default open or close DevTools by F12 in development

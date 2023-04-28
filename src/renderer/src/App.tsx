@@ -17,7 +17,7 @@ export const App = () => {
     } else {
       timer = window.setTimeout(() => {
         window.api.interProcess(GET_SEARCH_RESULTS, inputRef.current?.value).then((files) => {
-          setFiles(files.slice(0, 3))
+          setFiles(files.slice(0, 6))
           setActive(0)
         })
         timer = null

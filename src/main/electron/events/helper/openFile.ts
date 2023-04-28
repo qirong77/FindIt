@@ -4,11 +4,12 @@ import { BrowserWindow } from 'electron'
 import { IFile } from '../../../../common/types'
 export const openFile = (e: Electron.IpcMainEvent, file: IFile) => {
   if (/\.app/.test(file.fileName)) {
-    exec(`open ${file.filePath.replaceAll(' ','\\ ')}`)
+    exec(`open ${file.filePath.replaceAll(' ', '\\ ')}`)
   } else {
     const appName = 'Visual Studio Code'
+    const isFinder = /-f$/.test(file.fileName)
     // 使用 "open" 命令打开文件夹
-    exec(`open -a "${appName}" "${file.filePath}"`, (error, _stdout, _stderr) => {
+    exec(`open -a "${appName}" "${isFinder ? '' : file.filePath}"`, (error, _stdout, _stderr) => {
       if (error) {
         console.error(`执行错误: ${error}`)
         return

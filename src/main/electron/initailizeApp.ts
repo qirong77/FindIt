@@ -1,4 +1,4 @@
-import { globalShortcut } from 'electron'
+import { globalShortcut, app } from 'electron'
 import { onEvents } from './events'
 import { createTray } from './helper/createTray'
 import { createWindow } from './helper/createWindow'
