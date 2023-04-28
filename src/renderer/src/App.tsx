@@ -8,10 +8,10 @@ export const App = () => {
   const [allFiles, setAllFiles] = useState<FindItFile[]>([])
   const [files, setFiles] = useState<FindItFile[]>([])
   const [active, setActive] = useState(0)
+  const iptRef = useRef<HTMLInputElement>(null)
   const handleChange = debounce((e) => {
     const search = e.target.value as string
     window.api.sendToMain(SET_WINDOW_SIZE, search ? 240 : 50)
-
     if (!search) {
       setFiles([])
       return
@@ -38,6 +38,7 @@ export const App = () => {
       >
         <SearchIcon />
         <input
+          ref={iptRef}
           autoFocus
           onKeyDown={handleKeyDown}
           onChange={handleChange}
@@ -48,7 +49,7 @@ export const App = () => {
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
           <li
-            className={`flex [&>svg]:mx-[6px] [&>svg]:w-[18px] [&>svg]:h-[18px] items-center  h-[30px] ${
+            className={`flex opacity-70  [&>svg]:mx-[6px] [&>svg]:w-[18px] [&>svg]:h-[18px] items-center  h-[30px] ${
               i === active ? 'active-li' : ''
             }`}
             key={file.filePath + file.type}
@@ -69,20 +70,22 @@ export const App = () => {
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'ArrowUp') {
+      e.preventDefault()
       e.metaKey ? setActive(0) : setActive(active - 1 < 0 ? files.length - 1 : active - 1)
     }
     if (e.key === 'ArrowDown') {
+      e.preventDefault()
       e.metaKey
         ? setActive(files.length - 1)
         : setActive(active + 1 > files.length - 1 ? 0 : active + 1)
     }
     if (e.key === 'Enter') {
+      const search = iptRef.current?.value
       search &&
         window.api.sendToMain(OPEN_FILE, {
           ...files[active],
-          search
+          search,
         })
-      setSearch('')
     }
   }
 }

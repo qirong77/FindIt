@@ -5,6 +5,6 @@ import { getAllPaths } from './helper/getAllPaths'
 
 export const onEvents = () => {
   ipcMain.on(OPEN_FILE, (e, args) => openFile(e, args))
-  ipcMain.on(SET_WINDOW_SIZE, (e, args) => getWindow(e)?.setSize(660, args))
+  ipcMain.on(SET_WINDOW_SIZE, (e, args) => getWindow(e)?.setSize(600, args))
   ipcMain.handle(GET_ALL_FILES, () => getAllPaths())
 }

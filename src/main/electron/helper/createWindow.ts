@@ -4,7 +4,7 @@ import path from 'path'
 
 export function createWindow(): BrowserWindow {
   const mainWindow = new BrowserWindow({
-    width: 660,
+    width: 600,
     height: 50,
     show: true,
     type: 'toolbar',

@@ -6,7 +6,6 @@ let tray
 export const initailizeApp = () => {
   onEvents()
   const mainWindow = createWindow()
-  mainWindow.webContents.openDevTools()
   // 在全屏模式可见,会隐藏左上角的菜单栏
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   mainWindow.setAlwaysOnTop(true, 'floating', 1)

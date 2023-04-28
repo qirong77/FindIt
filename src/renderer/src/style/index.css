@@ -1,17 +1,18 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 li {
-    list-style: none;
+  list-style: none;
 }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
-    .active-li {
-        background-color: rgb(223, 224, 225);
-        border-radius: 3px;
-    }
+  .active-li {
+    background-color: rgb(218, 221, 225);
+    opacity: 100% !important;
+    border-radius: 3px;
+  }
 }
