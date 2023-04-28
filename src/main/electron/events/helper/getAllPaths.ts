@@ -10,7 +10,7 @@ export function getAllPaths() {
     '/Users/qirong77/.zshrc',
     '/Users/qirong77/Desktop/front-end-road/Markdowns'
   ]
-  const finderPaths = [...vscodePaths]
+  const finderPaths = [...vscodePaths,'/Users/qirong77/Downloads','/Users/qirong77/Desktop']
   appPaths.forEach((p) => {
     paths.push({
       fileName: basename(p),

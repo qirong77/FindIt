@@ -1,6 +1,7 @@
-import { app, Menu, Tray } from 'electron'
+import { app, BrowserWindow, Menu, Tray } from 'electron'
+import { GET_ALL_FILES } from '../../../common/const'
 
-export const createTray = () => {
+export const createTray = (window: BrowserWindow) => {
   const tray = new Tray('/Users/qirong77/Desktop/projects/findIt/build/umbrellaTemplate.png')
   const contextMenu = Menu.buildFromTemplate([
     { label: '打开设置', type: 'radio', checked: true },
@@ -13,6 +14,7 @@ export const createTray = () => {
     {
       label: '重新加载查询数据',
       click() {
+        window.webContents.send(GET_ALL_FILES)
       }
     }
   ])

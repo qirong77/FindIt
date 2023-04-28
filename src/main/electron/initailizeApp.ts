@@ -10,7 +10,7 @@ export const initailizeApp = () => {
   mainWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
   mainWindow.setAlwaysOnTop(true, 'floating', 1)
   mainWindow.on('blur', mainWindow.hide)
-  tray = createTray()
+  tray = createTray(mainWindow)
   globalShortcut.register('Alt+Space', () => {
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })

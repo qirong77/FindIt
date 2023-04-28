@@ -25,9 +25,12 @@ export const App = () => {
     setFiles(maths.slice(0, 5))
   }, 100)
   useEffect(() => {
-    window.api.interProcess(GET_ALL_FILES).then((files) => {
-      setAllFiles(files)
-    })
+    const getPaths = () =>
+      window.api.interProcess(GET_ALL_FILES).then((files) => {
+        setAllFiles(files)
+      })
+    window.api.onMain(GET_ALL_FILES, getPaths)
+    getPaths()
   }, [])
   return (
     <div className="container min-w-sm">
@@ -84,7 +87,7 @@ export const App = () => {
       search &&
         window.api.sendToMain(OPEN_FILE, {
           ...files[active],
-          search,
+          search
         })
     }
   }
