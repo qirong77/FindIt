@@ -22,7 +22,7 @@ export const App = () => {
         match: getMatchLevel(file.fileName, search)
       }))
       .sort((f1, f2) => f2.match - f1.match)
-    setFiles(maths.slice(0, 5))
+    setFiles(maths.slice(0, 6))
   }, 100)
   useEffect(() => {
     const getPaths = () =>
