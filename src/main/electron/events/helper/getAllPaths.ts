@@ -4,13 +4,17 @@ import { FindItFile } from '../../../../common/types'
 // 获取所有的路径
 export function getAllPaths() {
   const paths: FindItFile[] = []
-  const appPaths = [...getDirFiles('/Applications'), '/System/Applications/Utilities/Terminal.app']
+  const appPaths = [
+    ...getDirFiles('/Applications'),
+    '/System/Applications/Utilities/Terminal.app',
+    '/System/Applications/App Store.app'
+  ]
   const vscodePaths = [
     ...getDirFiles('/Users/qirong77/Desktop/projects'),
     '/Users/qirong77/.zshrc',
     '/Users/qirong77/Desktop/front-end-road/Markdowns'
   ]
-  const finderPaths = [...vscodePaths,'/Users/qirong77/Downloads','/Users/qirong77/Desktop']
+  const finderPaths = [...vscodePaths, '/Users/qirong77/Downloads', '/Users/qirong77/Desktop']
   appPaths.forEach((p) => {
     paths.push({
       fileName: basename(p),
@@ -44,4 +48,3 @@ function getDirFiles(dir = '') {
   })
   return paths
 }
-

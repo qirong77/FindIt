@@ -85,11 +85,15 @@ export const App = () => {
     }
     if (e.key === 'Enter') {
       const search = iptRef.current?.value
-      search &&
+      if (search) {
         window.api.sendToMain(OPEN_FILE, {
           ...files[active],
           search
         })
+        window.api.sendToMain(SET_WINDOW_SIZE, 50)
+        setFiles([])
+      }
+      iptRef.current!.value = ''
     }
   }
 }
