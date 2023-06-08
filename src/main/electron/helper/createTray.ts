@@ -2,7 +2,7 @@ import { app, BrowserWindow, Menu, Tray } from 'electron'
 import { GET_ALL_FILES } from '../../../common/const'
 
 export const createTray = (window: BrowserWindow) => {
-  const tray = new Tray('/Users/qirong77/Desktop/projects/findIt/build/umbrellaTemplate.png')
+  const tray = new Tray('/Users/qirong77/Documents/Code/projects/findIt/build/umbrellaTemplate.png')
   const contextMenu = Menu.buildFromTemplate([
     { label: '打开设置', type: 'radio', checked: true },
     {

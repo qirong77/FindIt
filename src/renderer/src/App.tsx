@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FindItFile } from 'src/common/types'
 import { GET_ALL_FILES, OPEN_FILE, SET_WINDOW_SIZE } from '../../common/const'
-import { AppIcon, FinderIcon, SearchIcon, VsCodeIcon } from './icons'
+import { AppIcon, FinderIcon, MiniAppIcon, SearchIcon, VsCodeIcon } from './icons'
 import debounce from 'debounce'
 import pinyin from 'pinyin'
 export const App = () => {
@@ -20,7 +20,7 @@ export const App = () => {
     const maths = allFiles
       .map((file) => ({
         ...file,
-        match: getMatchLevel(file.fileName, search)
+        match: getMatchLevel(file, search)
       }))
       .sort((f1, f2) => f2.match - f1.match)
     setFiles(maths.slice(0, 6))
@@ -62,6 +62,8 @@ export const App = () => {
               <AppIcon />
             ) : file.type === 'vscode' ? (
               <VsCodeIcon />
+            ) : file.type === 'mini-app' ? (
+              <MiniAppIcon />
             ) : (
               <FinderIcon />
             )}
@@ -97,13 +99,19 @@ export const App = () => {
     }
   }
 }
-function getMatchLevel(fileName = '', word = '') {
-  fileName = normalizeStr(fileName)
+function getMatchLevel(file: FindItFile, word = '') {
+  const extra = {
+    app: 0,
+    vscode: 3,
+    finder: -10,
+    'mini-app': 2
+  }
+  let fileName = normalizeStr(file.fileName)
   word = normalizeStr(word)
-  if (fileName.includes(word)) return 100 - fileName.indexOf(word)
+  if (fileName.includes(word)) return 100 - fileName.indexOf(word) + extra[file.type]
   const mcl = maxCommonLength(fileName, word)
   // 当没有匹配项的时候,返回最长公共子序列的长度
-  return mcl
+  return mcl + extra[file.type]
   function normalizeStr(str = '') {
     return pinyin(str, {
       style: 'normal'

@@ -7,7 +7,9 @@ export const openFile = (e: Electron.IpcMainEvent, file: FindItFile) => {
   } else {
     // 使用 "open" 命令打开文件夹
     const useFinder = `open ${file.filePath}`
-    const useVsCode = `open -a "Visual Studio Code" "${file.filePath}"`
+    const useVsCode = `open -a "${
+      file.type === 'mini-app' ? 'wechatwebdevtools' : 'Visual Studio Code'
+    }" "${file.filePath}"`
     exec(file.type === 'finder' ? useFinder : useVsCode)
   }
   getWindow(e)?.hide()

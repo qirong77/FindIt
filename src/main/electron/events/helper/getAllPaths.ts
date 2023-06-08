@@ -9,12 +9,14 @@ export function getAllPaths() {
     '/System/Applications/Utilities/Terminal.app',
     '/System/Applications/App Store.app'
   ]
+  const miniAppPath = [...getDirFiles('/Users/qirong77/Documents/Code/mini-app')]
   const vscodePaths = [
-    ...getDirFiles('/Users/qirong77/Desktop/projects'),
+    ...getDirFiles('/Users/qirong77/Documents/Code/projects'),
+    ...miniAppPath,
     '/Users/qirong77/.zshrc',
     '/Users/qirong77/Desktop/front-end-road/Markdowns'
   ]
-  const finderPaths = [...vscodePaths, '/Users/qirong77/Downloads', '/Users/qirong77/Desktop']
+  const finderPaths = [...vscodePaths, '/Users/qirong77/Downloads']
   appPaths.forEach((p) => {
     paths.push({
       fileName: basename(p),
@@ -34,6 +36,13 @@ export function getAllPaths() {
       fileName: basename(p),
       filePath: p,
       type: 'finder'
+    })
+  })
+  miniAppPath.forEach((p) => {
+    paths.push({
+      fileName: basename(p),
+      filePath: p,
+      type: 'mini-app'
     })
   })
   return paths
