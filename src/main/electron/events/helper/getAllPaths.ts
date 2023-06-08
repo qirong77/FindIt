@@ -32,8 +32,9 @@ export function getAllPaths() {
     })
   })
   finderPaths.forEach((p) => {
+    // 打开下载文件夹的方式来替代打开访达app
     paths.push({
-      fileName: basename(p),
+      fileName: p.includes('Downloads') ? 'finder' : basename(p),
       filePath: p,
       type: 'finder'
     })
@@ -45,7 +46,7 @@ export function getAllPaths() {
       type: 'mini-app'
     })
   })
-  return paths
+  return paths.filter((p) => !p.fileName.includes('findIt'))
 }
 
 function getDirFiles(dir = '') {
