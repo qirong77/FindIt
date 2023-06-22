@@ -6,7 +6,7 @@ import { basename } from 'path'
 import { getWindow } from '../utils/getWindow'
 
 export const onEvents = () => {
-  // ipcMain.on(OPEN_FILE, (e, args) => openFile(e, args))
+  ipcMain.on(OPEN_FILE, openFile)
   ipcMain.on(SET_WINDOW_SIZE, (e, args) => getWindow(e)?.setSize(600, args))
   ipcMain.handle(GET_ALL_FILES, getAllPaths)
   ipcMain.handle(SELECT_FILES, async (e) => {
@@ -20,5 +20,4 @@ export const onEvents = () => {
       filePath: file
     }))
   })
-  ipcMain.on(OPEN_FILE, openFile)
 }

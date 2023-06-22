@@ -4,11 +4,10 @@ import { Search } from './view/Search'
 import { CHANGE_VIEW } from '../../renderer/../common/const'
 
 export const App = () => {
-  const [view, setView] = useState('设置')
+  const [view, setView] = useState('')
   useEffect(() => {
-    window.api.onMain(CHANGE_VIEW, () => {
-      console.log('CHANGE_VIEW')
-      setView('设置')
+    window.api.onMain(CHANGE_VIEW, (_e, arg) => {
+      setView(arg)
     })
   }, [])
   return (
