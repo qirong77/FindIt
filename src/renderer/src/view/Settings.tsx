@@ -21,9 +21,10 @@ export const Settings = () => {
     <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
       {datas.map((data) => (
         <div className="w-[28%] border-2 h-[370px] border-black rounded my-[20px] " key={data.id}>
-          <header className="flex px-[10px] justify-between">
+          <header className="flex px-[10px] justify-between text-lg">
             {/* 后续这个用Select的方式 更易于理解*/}
             <span
+              className="cursor-pointer"
               onClick={() => {
                 window.api.interProcess(SELECT_FILES).then((files) => {
                   const newDatas = deepCloneDatas()
@@ -36,6 +37,7 @@ export const Settings = () => {
               {data.app?.fileName?.replace('.app', '') || '快速打开'}
             </span>
             <span
+              className="cursor-pointer"
               onClick={() => {
                 const newDatas = deepCloneDatas()
                 setDatas(newDatas.filter((d) => d.id !== data.id))
@@ -44,7 +46,7 @@ export const Settings = () => {
               —
             </span>
           </header>
-          <div className="h-[300px] p-[10px] overflow-scroll">
+          <div className="h-[300px] p-[10px] overflow-scroll text-slate-800">
             <ul>
               {data.files.map((f) => (
                 <li className="flex justify-between" key={f.filePath}>

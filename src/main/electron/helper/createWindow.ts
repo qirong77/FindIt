@@ -34,8 +34,12 @@ export function createWindow(): BrowserWindow {
   }
   return mainWindow
 }
-
+let settingWindow: BrowserWindow
 export function createSettingWindow(): BrowserWindow {
+  if (settingWindow) {
+    settingWindow.focus()
+    return settingWindow
+  }
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -50,6 +54,7 @@ export function createSettingWindow(): BrowserWindow {
   mainWindow.webContents.on('dom-ready', () => {
     mainWindow.webContents.send(CHANGE_VIEW, '设置')
   })
+  settingWindow = mainWindow
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
