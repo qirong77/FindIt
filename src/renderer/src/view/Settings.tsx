@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
 import { GET_DATA, SAVE_DATA, SELECT_FILES } from '../../../common/const'
-import { FindItFile } from '../../../common/types'
-interface IData {
-  app: FindItFile
-  level?: number
-  files: FindItFile[]
-  id: number
-}
+import { FindItFile, IData } from '../../../common/types'
+
 export const Settings = () => {
   const [datas, setDatas] = useState<IData[]>([])
   useEffect(() => {
