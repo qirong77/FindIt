@@ -1,6 +1,7 @@
 export interface FindItFile {
   fileName: string
   filePath: string
+  iconPath?: string
 }
 
 export interface IData {

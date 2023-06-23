@@ -18,6 +18,7 @@ export const Settings = () => {
         <div className="w-[28%] border-2 h-[370px] border-black rounded my-[20px] " key={data.id}>
           <header className="flex px-[10px] justify-between text-lg">
             {/* 后续这个用Select的方式 更易于理解*/}
+            <img />
             <span
               className="cursor-pointer"
               onClick={() => {
