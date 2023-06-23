@@ -1,13 +1,22 @@
 import fs from 'node:fs'
-import { fileIconToBuffer } from 'file-icon'
-import { basename } from 'node:path'
 
-export const saveIcon = async (paths = ['/Applications/BaiduNetdisk_mac.app']) => {
-  const buffers = (await fileIconToBuffer(paths.filter((p) => p.endsWith('.app')))) as Buffer[]
-  return new Promise((resolve) => {
-    buffers.forEach((buffer, index) => {
-      fs.writeFileSync(basename(paths[index]) + '.png', buffer)
-      if (index === buffers.length - 1) resolve('done')
+import path, { basename } from 'node:path'
+import { fileIconToBuffer } from '../../../renderer/public/lib/file-icon/index'
+import { fileURLToPath } from 'node:url'
+const __dirname = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+
+export const saveIcon = (paths = ['/Applications/BaiduNetdisk_mac.app']) => {
+  return fileIconToBuffer(
+    paths.filter((p) => p.endsWith('.app')),
+    {}
+  )
+    .then((buffers) => {
+      buffers.forEach((buffer, index) => {
+        const base = basename(paths[index]) + '.png'
+        fs.writeFileSync(path.join(__dirname, 'renderer', 'images', base), buffer)
+      })
     })
-  })
+    .catch((error) => {
+      console.log(error)
+    })
 }

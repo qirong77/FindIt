@@ -12,6 +12,7 @@ import { getAllPaths } from './helper/getAllPaths'
 import { basename } from 'path'
 import { getWindow } from '../utils/getWindow'
 import Store from 'electron-store'
+import { saveIcon } from '../utils/saveIcon'
 const store = new Store()
 const DATE_KEY = 'find it data'
 export const onEvents = () => {
@@ -30,6 +31,7 @@ export const onEvents = () => {
     }))
   })
   ipcMain.handle(SAVE_DATA, (_e, data) => {
+    saveIcon()
     store.set(DATE_KEY, data)
     return store.get(DATE_KEY) || []
   })
