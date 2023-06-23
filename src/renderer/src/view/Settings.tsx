@@ -18,10 +18,10 @@ export const Settings = () => {
     window.api.interProcess(SAVE_DATA, JSON.stringify(datas))
   }, [datas])
   return (
-    <div className="w-[100vw] h-[100vh] p-[30px] flex flex-wrap justify-start">
+    <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
       {datas.map((data) => (
-        <div className="w-[30%] p-[30px]" key={data.id}>
-          <header className="flex justify-between">
+        <div className="w-[28%] border-2 h-[370px] border-black rounded my-[20px] " key={data.id}>
+          <header className="flex px-[10px] justify-between">
             {/* 后续这个用Select的方式 更易于理解*/}
             <span
               onClick={() => {
@@ -41,10 +41,10 @@ export const Settings = () => {
                 setDatas(newDatas.filter((d) => d.id !== data.id))
               }}
             >
-              -
+              —
             </span>
           </header>
-          <div>
+          <div className="h-[300px] p-[10px] overflow-scroll">
             <ul>
               {data.files.map((f) => (
                 <li className="flex justify-between" key={f.filePath}>
@@ -69,7 +69,7 @@ export const Settings = () => {
             </ul>
           </div>
           <div
-            className="text-center cursor-pointer rounded border-dotted border-black border-[2px]"
+            className="text-center w-[80%] mx-auto cursor-pointer rounded border-dotted border-black border-[2px] mt-[8px]"
             onClick={() => {
               window.api.interProcess(SELECT_FILES).then((value: FindItFile[]) => {
                 const newDatas = deepCloneDatas()
@@ -84,6 +84,7 @@ export const Settings = () => {
         </div>
       ))}
       <div
+        className="w-[28%] border-2 h-[370px] flex justify-center items-center border-slate-900 border-dotted rounded my-[20px] cursor-pointer "
         onClick={() =>
           setDatas([
             ...deepCloneDatas(),
@@ -99,7 +100,7 @@ export const Settings = () => {
           ])
         }
       >
-        添加卡片
+        <span>添加卡片 + </span>
       </div>
     </div>
   )
