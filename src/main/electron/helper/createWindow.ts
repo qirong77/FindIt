@@ -54,7 +54,6 @@ export function createSettingWindow(): BrowserWindow {
   mainWindow.webContents.on('dom-ready', () => {
     mainWindow.webContents.send(CHANGE_VIEW, '设置')
   })
-  mainWindow.webContents.openDevTools()
   settingWindow = mainWindow
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)

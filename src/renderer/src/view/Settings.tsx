@@ -15,12 +15,18 @@ export const Settings = () => {
   return (
     <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
       {datas.map((data) => (
-        <div className="w-[28%] border-2 h-[370px] border-black rounded my-[20px] " key={data.id}>
-          <header className="flex px-[10px] justify-between text-lg">
+        <div
+          className="w-[28%] pr-[10px] border-2 h-[370px] border-black rounded my-[20px] "
+          key={data.id}
+        >
+          <header className="flex items-center justify-start text-lg">
             {/* 后续这个用Select的方式 更易于理解*/}
-            <img />
+            <img
+              className="h-[20px] mx-[10px]"
+              src={'data:image/png;base64,' + data.app.iconPath}
+            />
             <span
-              className="cursor-pointer"
+              className="cursor-pointer w-[60%] overflow-hidden text-ellipsis"
               onClick={() => {
                 window.api.interProcess(SELECT_FILES).then((files) => {
                   const newDatas = deepCloneDatas()
@@ -33,7 +39,7 @@ export const Settings = () => {
               {data.app?.fileName?.replace('.app', '') || '快速打开'}
             </span>
             <span
-              className="cursor-pointer"
+              className="cursor-pointer ml-auto"
               onClick={() => {
                 const newDatas = deepCloneDatas()
                 setDatas(newDatas.filter((d) => d.id !== data.id))

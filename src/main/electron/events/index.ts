@@ -5,20 +5,24 @@ import {
   OPEN_FILE,
   SAVE_DATA,
   SELECT_FILES,
-  SET_WINDOW_SIZE
+  SET_WINDOW_SIZE,
+  TOOGLE_DEVTOOL
 } from '../../../common/const'
 import { openFile } from './helper/openFile'
 import { getAllPaths } from './helper/getAllPaths'
 import { basename } from 'path'
 import { getWindow } from '../utils/getWindow'
 import Store from 'electron-store'
-import { getSavePath, saveIcon } from '../utils/saveIcon'
 import { IData } from '../../../common/types'
+import { getIconBuffers } from '../utils/getIconBuffers'
 const store = new Store()
 const DATE_KEY = 'find it data'
 export const onEvents = () => {
   ipcMain.on(OPEN_FILE, openFile)
   ipcMain.on(SET_WINDOW_SIZE, (e, args) => getWindow(e)?.setSize(600, args))
+  ipcMain.on(TOOGLE_DEVTOOL, (e) => {
+    getWindow(e)?.webContents.openDevTools()
+  })
   ipcMain.handle(GET_ALL_FILES, getAllPaths)
   ipcMain.handle(SELECT_FILES, async (e) => {
     const window = getWindow(e)
@@ -31,10 +35,15 @@ export const onEvents = () => {
       filePath: file
     }))
   })
-  ipcMain.handle(SAVE_DATA, (_e, datas: string) => {
+  ipcMain.handle(SAVE_DATA, async (_e, datas: string) => {
     const _datas = JSON.parse(datas) as IData[]
-    saveIcon(_datas.map((data) => data.app.filePath))
-    _datas.forEach((data) => (data.app.iconPath = getSavePath(data.app.filePath)))
+    for (let i = 0; i < _datas.length; i++) {
+      const path = _datas[i].app.filePath
+      if (path) {
+        const [iconBuffer]: Buffer[] = await getIconBuffers([_datas[i].app.filePath])
+        _datas[i].app.iconPath = iconBuffer.toString('base64')
+      }
+    }
     store.set(DATE_KEY, JSON.stringify(_datas))
     return store.get(DATE_KEY) || []
   })
