@@ -7,7 +7,7 @@ import {
   WINDOW_BLUR,
   WINDOW_SHOW
 } from '../../../common/const'
-import { SearchIcon } from '.././icons'
+import { ArrowRight, SearchIcon } from '.././icons'
 import debounce from 'debounce'
 import pinyin from 'pinyin'
 import { IData, SearchFile } from '../../../common/types'
@@ -24,13 +24,13 @@ export const Search = () => {
       setFiles([])
       return
     }
-    const maths = allFiles
+    const sortedFiles = allFiles
       .map((file) => ({
         ...file,
         match: getMatchLevel(file, search)
       }))
       .sort((f1, f2) => f2.match - f1.match)
-    setFiles(maths.slice(0, 6))
+    setFiles(sortedFiles)
   }, 100)
   useEffect(() => {
     const update = () => {
@@ -49,7 +49,10 @@ export const Search = () => {
       })
     }
     window.api.onMain(WINDOW_SHOW, update)
-    window.api.onMain(WINDOW_BLUR, () => setFiles([]))
+    window.api.onMain(WINDOW_BLUR, () => {
+      setFiles([])
+      window.api.sendToMain(SET_WINDOW_SIZE, 50)
+    })
     update()
   }, [])
   return (
@@ -82,6 +85,12 @@ export const Search = () => {
             }`}
             key={file.filePath + i}
           >
+            {file?.app.iconPath && (
+              <>
+                <img className="h-[30px]" src={'data:image/png;base64,' + file.app.iconPath} />
+                <ArrowRight />
+              </>
+            )}
             <span className="mx-[6px]">
               {file.iconPath && (
                 <img className="h-[20px]" src={'data:image/png;base64,' + file.iconPath} />

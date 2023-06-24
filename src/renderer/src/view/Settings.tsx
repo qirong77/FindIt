@@ -63,7 +63,7 @@ export const Settings = () => {
               —
             </span>
           </header>
-          <div className="flex-auto p-[10px] overflow-scroll text-slate-800">
+          <div className="flex-1 p-[10px] overflow-scroll text-slate-800">
             <ul>
               {data.files.map((f) => (
                 <li className="flex pr-[20px] justify-start items-center" key={f.filePath}>
