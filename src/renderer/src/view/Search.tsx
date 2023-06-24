@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { GET_ALL_FILES, OPEN_FILE, SET_WINDOW_SIZE } from '../../../common/const'
-import { AppIcon, FinderIcon, MiniAppIcon, SearchIcon, VsCodeIcon } from '.././icons'
+import { GET_DATA, OPEN_FILE, SET_WINDOW_SIZE } from '../../../common/const'
+import { SearchIcon } from '.././icons'
 import debounce from 'debounce'
 import pinyin from 'pinyin'
-import { FindItFile } from '../../../common/types'
+import { IData, SearchFile } from '../../../common/types'
 export const Search = () => {
-  const [allFiles, setAllFiles] = useState<FindItFile[]>([])
-  const [files, setFiles] = useState<FindItFile[]>([])
+  const [allFiles, setAllFiles] = useState<SearchFile[]>([])
+  const [files, setFiles] = useState<SearchFile[]>([])
   const [active, setActive] = useState(0)
   const iptRef = useRef<HTMLInputElement>(null)
   const handleChange = debounce((e) => {
@@ -27,17 +27,24 @@ export const Search = () => {
     setFiles(maths.slice(0, 6))
   }, 100)
   useEffect(() => {
-    const getPaths = () =>
-      window.api.interProcess(GET_ALL_FILES).then((files) => {
-        setAllFiles(files)
-      })
-    window.api.onMain(GET_ALL_FILES, getPaths)
-    getPaths()
+    window.api.interProcess(GET_DATA).then((value) => {
+      const datas: IData[] = JSON.parse(value)
+      const _files = datas.reduce((pre, data) => {
+        data.files.forEach((file) => {
+          pre.push({
+            ...file,
+            app: data.app
+          })
+        })
+        return pre
+      }, [] as SearchFile[])
+      setAllFiles(_files)
+    })
   }, [])
   return (
     <div className="container min-w-sm">
       <div
-        className={`flex pl-[20px] w-[100vw] items-center h-[50px] border-b-[1px] ${
+        className={`relative flex pl-[20px] w-[100vw] items-center h-[50px] border-b-[1px] ${
           files.length ? 'border-slate-300' : 'border-transparent'
         } `}
       >
@@ -47,9 +54,14 @@ export const Search = () => {
           autoFocus
           onKeyDown={handleKeyDown}
           onChange={handleChange}
-          className="mx-4 pl-[4px] h-full text-xl outline-none"
+          className="mx-4 pl-[4px] h-full text-xl outline-none flex-1"
           type="text"
         />
+        <span className="mx-[20px]">
+          {files[active]?.app.iconPath && (
+            <img className="h-[30px]" src={'data:image/png;base64,' + files[active].app.iconPath} />
+          )}
+        </span>
       </div>
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
@@ -59,6 +71,11 @@ export const Search = () => {
             }`}
             key={file.filePath + i}
           >
+            <span className="mx-[6px]">
+              {file.iconPath && (
+                <img className="h-[20px]" src={'data:image/png;base64,' + file.iconPath} />
+              )}
+            </span>
             <span>{file.fileName.replace('.app', '')}</span>
           </li>
         ))}
@@ -80,10 +97,7 @@ export const Search = () => {
     if (e.key === 'Enter') {
       const search = iptRef.current?.value
       if (search) {
-        window.api.sendToMain(OPEN_FILE, {
-          ...files[active],
-          search
-        })
+        window.api.sendToMain(OPEN_FILE, files[active])
         window.api.sendToMain(SET_WINDOW_SIZE, 50)
         setFiles([])
       }
@@ -91,33 +105,17 @@ export const Search = () => {
     }
   }
 }
-function getMatchLevel(file: FindItFile, word = '') {
-  const extra = {
-    app: 0,
-    vscode: 3,
-    finder: -10,
-    'mini-app': 2
-  }
+function getMatchLevel(file: SearchFile, word = '') {
   let fileName = normalizeStr(file.fileName)
   word = normalizeStr(word)
-  if (fileName.includes(word)) return 100 - fileName.indexOf(word) + extra[file.type]
-  const mcl = maxCommonLength(fileName, word)
-  // 当没有匹配项的时候,返回最长公共子序列的长度
-  return mcl + extra[file.type]
-  function normalizeStr(str = '') {
-    return pinyin(str, {
-      style: 'normal'
-    })
-      .join('')
-      .toLowerCase()
-  }
-  function maxCommonLength(str1 = '1234', str2 = '321') {
-    if (!str1.length || !str2.length) return 0
-    if (str1[0] === str2[0]) {
-      return maxCommonLength(str1.slice(1), str2.slice(1)) + 1
-    }
-    const case1 = maxCommonLength(str1.slice(1), str2)
-    const case2 = maxCommonLength(str1.slice(), str2.slice(1))
-    return Math.max(case1, case2)
-  }
+  if (fileName.includes(word)) return 100 - fileName.indexOf(word)
+  // 没有找到,返回-1
+  return -1
+}
+function normalizeStr(str = '') {
+  return pinyin(str, {
+    style: 'normal'
+  })
+    .join('')
+    .toLowerCase()
 }

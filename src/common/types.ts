@@ -10,3 +10,7 @@ export interface IData {
   files: FindItFile[]
   id: number
 }
+
+export interface SearchFile extends FindItFile {
+  app: FindItFile
+}

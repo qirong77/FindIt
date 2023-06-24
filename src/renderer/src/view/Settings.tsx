@@ -10,12 +10,9 @@ export const Settings = () => {
     })
   }, [])
   useEffect(() => {
-    console.log('change')
     window.api.interProcess(SAVE_DATA, JSON.stringify(datas)).then((newDatas) => {
-      console.log('interProcess')
       if (newDatas != JSON.stringify(datas)) {
         setDatas(JSON.parse(newDatas))
-        console.log('changeState')
       }
     })
   }, [datas])
@@ -38,7 +35,7 @@ export const Settings = () => {
             <span
               className="cursor-pointer w-[60%] overflow-hidden text-ellipsis"
               onClick={() => {
-                window.api.interProcess(SELECT_FILES).then((files) => {
+                window.api.interProcess(SELECT_FILES, 1).then((files) => {
                   const newDatas = deepCloneDatas()
                   const newData = newDatas.find((_d) => _d.id === data.id) as IData
                   newData.app = files[0] || []
@@ -90,7 +87,7 @@ export const Settings = () => {
           <div
             className="text-center w-[80%] mx-auto cursor-pointer rounded border-dotted border-black border-[2px] mt-[8px]"
             onClick={() => {
-              window.api.interProcess(SELECT_FILES).then((value: FindItFile[]) => {
+              window.api.interProcess(SELECT_FILES, 0).then((value: FindItFile[]) => {
                 const newDatas = deepCloneDatas()
                 const newData = newDatas.find((_d) => _d.id === data.id)
                 newData!.files = value

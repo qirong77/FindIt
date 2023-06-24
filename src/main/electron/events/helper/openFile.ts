@@ -1,18 +1,18 @@
 import { exec } from 'child_process'
 import { getWindow } from '../../utils/getWindow'
 import { dialog } from 'electron'
-export const openFile = (e: Electron.IpcMainEvent, filePath = '', appPath = '') => {
-  if (appPath.includes('Visual Studio Code')) {
-    openFileWithVSCode(filePath)
+import { SearchFile } from '../../../../common/types'
+export const openFile = (e: Electron.IpcMainEvent, file: SearchFile) => {
+  if (file.app.filePath.includes('Visual Studio Code')) {
+    openFileWithVSCode(file.filePath)
     return
   }
   let command = ''
-  if (appPath) {
-    command = `open -a "${appPath}" "${filePath}"`
-  } else command = `open ${filePath}`
+  if (file.app.filePath) {
+    command = `open -a "${file.app.filePath}" "${file.filePath}"`
+  } else command = `open ${file.filePath}`
   exec(command, (error) => {
     if (error) {
-      console.log(filePath, appPath)
       dialog.showErrorBox('打开文件失败', '打开文件失败,请检查打开的方式或者文件是否存在')
     } else {
       getWindow(e)?.hide()

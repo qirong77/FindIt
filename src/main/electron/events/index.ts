@@ -1,6 +1,5 @@
 import { dialog, ipcMain } from 'electron'
 import {
-  GET_ALL_FILES,
   GET_DATA,
   OPEN_FILE,
   SAVE_DATA,
@@ -9,22 +8,20 @@ import {
   TOOGLE_DEVTOOL
 } from '../../../common/const'
 import { openFile } from './helper/openFile'
-import { getAllPaths } from './helper/getAllPaths'
 import { basename } from 'path'
 import { getWindow } from '../utils/getWindow'
 import Store from 'electron-store'
 import { IData } from '../../../common/types'
 import { getIconBuffers } from '../utils/getIconBuffers'
-const store = new Store()
-const DATE_KEY = 'find it data'
+export const store = new Store()
+export const DATE_KEY = 'find it data'
 export const onEvents = () => {
   ipcMain.on(OPEN_FILE, openFile)
   ipcMain.on(SET_WINDOW_SIZE, (e, args) => getWindow(e)?.setSize(600, args))
   ipcMain.on(TOOGLE_DEVTOOL, (e) => {
     getWindow(e)?.webContents.openDevTools()
   })
-  ipcMain.handle(GET_ALL_FILES, getAllPaths)
-  ipcMain.handle(SELECT_FILES, async (e) => {
+  ipcMain.handle(SELECT_FILES, async (e, _canSelectApp = false) => {
     const window = getWindow(e)
     if (!window) return []
     const { filePaths } = await dialog.showOpenDialog(window, {
@@ -34,6 +31,10 @@ export const onEvents = () => {
       fileName: basename(file),
       filePath: file
     }))
+    // .filter((f) => {
+    //   if (canSelectApp) return true
+    //   else return !f.filePath.endsWith('.app')
+    // })
   })
   ipcMain.handle(SAVE_DATA, async (_e, datas: string) => {
     const _datas = JSON.parse(datas) as IData[]
@@ -47,7 +48,6 @@ export const onEvents = () => {
     }
     store.set(DATE_KEY, JSON.stringify(_datas))
     return store.get(DATE_KEY) || []
-    // return store.get(DATE_KEY) || []
   })
   ipcMain.handle(GET_DATA, () => store.get(DATE_KEY) || [])
 }

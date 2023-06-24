@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, Tray } from 'electron'
-import { GET_ALL_FILES } from '../../../common/const'
 import { createSettingWindow } from './createWindow'
 
 export const createTray = (window: BrowserWindow) => {
@@ -20,7 +19,7 @@ export const createTray = (window: BrowserWindow) => {
     {
       label: '重新加载查询数据',
       click() {
-        window.webContents.send(GET_ALL_FILES)
+        console.log(window)
       }
     }
   ])
