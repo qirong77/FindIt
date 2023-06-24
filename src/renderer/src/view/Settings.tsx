@@ -61,13 +61,17 @@ export const Settings = () => {
           <div className="h-[300px] p-[10px] overflow-scroll text-slate-800">
             <ul>
               {data.files.map((f) => (
-                <li className="flex justify-between" key={f.filePath}>
-                  <img src={'data:image/png;base64,' + f.iconPath} />
+                <li className="flex justify-start items-center" key={f.filePath}>
+                  <span className="px-[6px]">
+                    {f.iconPath && (
+                      <img className="h-[16px]" src={'data:image/png;base64,' + f.iconPath} />
+                    )}
+                  </span>
                   <span className="w-[70%] overflow-hidden text-ellipsis">
                     {f.fileName.replace('.app', '')}
                   </span>
                   <span
-                    className="cursor-pointer"
+                    className="cursor-pointer ml-auto"
                     onClick={() => {
                       const newDatas = deepCloneDatas()
                       const newData = newDatas.find((_d) => _d.id === data.id) as IData

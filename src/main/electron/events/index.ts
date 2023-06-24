@@ -40,16 +40,10 @@ export const onEvents = () => {
     for (let i = 0; i < _datas.length; i++) {
       const data = _datas[i]
       data.app.iconPath = await getIconBuffers([data.app.filePath])
-      console.log(data.app.iconPath)
       // 给每个file赋值icon
-      // for (let j = 0; j < _datas[i].files.length - 1; j++) {
-      //   const file = _datas[i].files[i]
-      //   if (file.filePath) {
-      //     const [iconBuffer]: Buffer[] = await getIconBuffers([_datas[i].app.filePath])
-      //     file.iconPath = iconBuffer.toString('base64')
-      //     console.log(file.iconPath)
-      //   }
-      // }
+      for (let j = 0; j < data.files.length; j++) {
+        data.files[j].iconPath = await getIconBuffers([data.files[j].filePath])
+      }
     }
     store.set(DATE_KEY, JSON.stringify(_datas))
     return store.get(DATE_KEY) || []
