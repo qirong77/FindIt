@@ -38,14 +38,22 @@ export const onEvents = () => {
   ipcMain.handle(SAVE_DATA, async (_e, datas: string) => {
     const _datas = JSON.parse(datas) as IData[]
     for (let i = 0; i < _datas.length; i++) {
-      const path = _datas[i].app.filePath
-      if (path) {
-        const [iconBuffer]: Buffer[] = await getIconBuffers([_datas[i].app.filePath])
-        _datas[i].app.iconPath = iconBuffer.toString('base64')
-      }
+      const data = _datas[i]
+      data.app.iconPath = await getIconBuffers([data.app.filePath])
+      console.log(data.app.iconPath)
+      // 给每个file赋值icon
+      // for (let j = 0; j < _datas[i].files.length - 1; j++) {
+      //   const file = _datas[i].files[i]
+      //   if (file.filePath) {
+      //     const [iconBuffer]: Buffer[] = await getIconBuffers([_datas[i].app.filePath])
+      //     file.iconPath = iconBuffer.toString('base64')
+      //     console.log(file.iconPath)
+      //   }
+      // }
     }
     store.set(DATE_KEY, JSON.stringify(_datas))
     return store.get(DATE_KEY) || []
+    // return store.get(DATE_KEY) || []
   })
   ipcMain.handle(GET_DATA, () => store.get(DATE_KEY) || [])
 }

@@ -10,7 +10,14 @@ export const Settings = () => {
     })
   }, [])
   useEffect(() => {
-    window.api.interProcess(SAVE_DATA, JSON.stringify(datas))
+    console.log('change')
+    window.api.interProcess(SAVE_DATA, JSON.stringify(datas)).then((newDatas) => {
+      console.log('interProcess')
+      if (newDatas != JSON.stringify(datas)) {
+        setDatas(JSON.parse(newDatas))
+        console.log('changeState')
+      }
+    })
   }, [datas])
   return (
     <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
@@ -21,10 +28,13 @@ export const Settings = () => {
         >
           <header className="flex items-center justify-start text-lg">
             {/* 后续这个用Select的方式 更易于理解*/}
-            <img
-              className="h-[20px] mx-[10px]"
-              src={'data:image/png;base64,' + data.app.iconPath}
-            />
+            <span className="mx-[6px]">
+              {data.app.iconPath ? (
+                <img className="h-[20px]" src={'data:image/png;base64,' + data.app.iconPath} />
+              ) : (
+                <span></span>
+              )}
+            </span>
             <span
               className="cursor-pointer w-[60%] overflow-hidden text-ellipsis"
               onClick={() => {
@@ -52,6 +62,7 @@ export const Settings = () => {
             <ul>
               {data.files.map((f) => (
                 <li className="flex justify-between" key={f.filePath}>
+                  <img src={'data:image/png;base64,' + f.iconPath} />
                   <span className="w-[70%] overflow-hidden text-ellipsis">
                     {f.fileName.replace('.app', '')}
                   </span>
