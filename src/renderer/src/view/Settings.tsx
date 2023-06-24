@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { GET_DATA, SAVE_DATA, SELECT_FILES } from '../../../common/const'
 import { FindItFile, IData } from '../../../common/types'
+import { AppIcon } from '../icons'
 
 export const Settings = () => {
   const [datas, setDatas] = useState<IData[]>([])
@@ -20,10 +21,10 @@ export const Settings = () => {
     <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
       {datas.map((data) => (
         <div
-          className="w-[28%] flex flex-col justify-around pr-[10px]  border-2 h-auto border-black rounded my-[20px] "
+          className="w-[28%] h-[350px] flex flex-col justify-around border-2  border-slate-600 rounded my-[20px] "
           key={data.id}
         >
-          <header className="flex items-center justify-start text-lg">
+          <header className="h-[36px] flex items-center justify-start text-lg bg-slate-50">
             {/* 后续这个用Select的方式 更易于理解*/}
             <span className="mx-[6px]">
               {data.app.iconPath ? (
@@ -33,7 +34,7 @@ export const Settings = () => {
               )}
             </span>
             <span
-              className="cursor-pointer w-[60%] overflow-hidden  h-[28px]"
+              className="cursor-pointer w-[60%] overflow-hidden  h-[28px] flex items-center"
               onClick={() => {
                 window.api.interProcess(SELECT_FILES, 1).then((files) => {
                   const newDatas = deepCloneDatas()
@@ -43,10 +44,10 @@ export const Settings = () => {
                 })
               }}
             >
-              {data.app?.fileName?.replace('.app', '') || '快速打开'}
+              {data.app?.fileName?.replace('.app', '') || <AppIcon />}
             </span>
             <span
-              className="cursor-pointer ml-auto"
+              className="cursor-pointer ml-auto mr-[10px]"
               onClick={() => {
                 const newDatas = deepCloneDatas()
                 setDatas(newDatas.filter((d) => d.id !== data.id))
@@ -55,10 +56,10 @@ export const Settings = () => {
               —
             </span>
           </header>
-          <div className="h-[250px] p-[10px] overflow-scroll text-slate-800">
+          <div className="flex-auto p-[10px] overflow-scroll text-slate-800">
             <ul>
               {data.files.map((f) => (
-                <li className="flex justify-start items-center" key={f.filePath}>
+                <li className="flex pr-[20px] justify-start items-center" key={f.filePath}>
                   <span className="px-[6px]">
                     {f.iconPath && (
                       <img className="h-[16px]" src={'data:image/png;base64,' + f.iconPath} />
@@ -83,12 +84,15 @@ export const Settings = () => {
             </ul>
           </div>
           <div
-            className="mx-auto cursor-pointer w-full flex justify-center items-center h-[50px]"
+            className="mx-auto cursor-pointer w-full flex justify-center items-center h-[50px] bg-slate-50"
             onClick={() => {
               window.api.interProcess(SELECT_FILES, 0).then((value: FindItFile[]) => {
                 const newDatas = deepCloneDatas()
-                const newData = newDatas.find((_d) => _d.id === data.id)
-                newData!.files = value
+                const newData = newDatas.find((_d) => _d.id === data.id) as IData
+                const preFils = newData.files.map((f) => f.filePath)
+                value.forEach((newFile) => {
+                  if (!preFils.includes(newFile.filePath)) newData.files.push(newFile)
+                })
                 setDatas(newDatas)
               })
             }}
@@ -100,7 +104,7 @@ export const Settings = () => {
         </div>
       ))}
       <div
-        className="w-[28%] border-2 h-[370px] flex justify-center items-center border-slate-900 border-dotted rounded my-[20px] cursor-pointer "
+        className="w-[28%] h-[350px] border-2  flex justify-center items-center border-slate-900 border-dotted rounded my-[20px] cursor-pointer "
         onClick={() =>
           setDatas([
             ...deepCloneDatas(),
