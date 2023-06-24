@@ -24,17 +24,18 @@ export const Settings = () => {
           className="w-[28%] h-[350px] flex flex-col justify-around border-2  border-slate-600 rounded my-[20px] "
           key={data.id}
         >
-          <header className="h-[36px] flex items-center justify-start text-lg bg-slate-50">
+          <header className="h-[36px] flex items-center justify-start  bg-slate-50">
             {/* 后续这个用Select的方式 更易于理解*/}
             <span className="mx-[6px]">
               {data.app.iconPath ? (
-                <img className="h-[20px]" src={'data:image/png;base64,' + data.app.iconPath} />
+                <img className="h-[25px]" src={'data:image/png;base64,' + data.app.iconPath} />
               ) : (
                 <span></span>
               )}
             </span>
+            {/* flex会影响文字溢出显示,所以要判断是否display:flex */}
             <span
-              className="cursor-pointer w-[60%] overflow-hidden  h-[28px] flex items-center"
+              className="cursor-pointer w-[60%]  h-[28px] flex items-center"
               onClick={() => {
                 window.api.interProcess(SELECT_FILES, 1).then((files) => {
                   const newDatas = deepCloneDatas()
@@ -44,10 +45,16 @@ export const Settings = () => {
                 })
               }}
             >
-              {data.app?.fileName?.replace('.app', '') || <AppIcon />}
+              {data.app?.fileName ? (
+                <span>{data.app?.fileName?.replace('.app', '')}</span>
+              ) : (
+                <span>
+                  <AppIcon />
+                </span>
+              )}
             </span>
             <span
-              className="cursor-pointer ml-auto mr-[10px]"
+              className="cursor-pointer ml-auto mr-[15px]"
               onClick={() => {
                 const newDatas = deepCloneDatas()
                 setDatas(newDatas.filter((d) => d.id !== data.id))
