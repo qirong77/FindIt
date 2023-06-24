@@ -20,7 +20,7 @@ export const Settings = () => {
     <div className="w-[100vw] p-[20px]  flex flex-wrap justify-around ">
       {datas.map((data) => (
         <div
-          className="w-[28%] pr-[10px] border-2 h-[370px] border-black rounded my-[20px] "
+          className="w-[28%] flex flex-col justify-around pr-[10px]  border-2 h-auto border-black rounded my-[20px] "
           key={data.id}
         >
           <header className="flex items-center justify-start text-lg">
@@ -55,7 +55,7 @@ export const Settings = () => {
               —
             </span>
           </header>
-          <div className="h-[300px] p-[10px] overflow-scroll text-slate-800">
+          <div className="h-[250px] p-[10px] overflow-scroll text-slate-800">
             <ul>
               {data.files.map((f) => (
                 <li className="flex justify-start items-center" key={f.filePath}>
@@ -83,7 +83,7 @@ export const Settings = () => {
             </ul>
           </div>
           <div
-            className="text-center w-[80%] mx-auto cursor-pointer rounded border-dotted border-black border-[2px] mt-[8px]"
+            className="mx-auto cursor-pointer w-full flex justify-center items-center h-[50px]"
             onClick={() => {
               window.api.interProcess(SELECT_FILES, 0).then((value: FindItFile[]) => {
                 const newDatas = deepCloneDatas()
@@ -93,7 +93,9 @@ export const Settings = () => {
               })
             }}
           >
-            添加 +
+            <div className="text-center w-[80%] rounded border-dotted border-black  border-[2px] ">
+              添加 +
+            </div>
           </div>
         </div>
       ))}

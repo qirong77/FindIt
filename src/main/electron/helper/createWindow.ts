@@ -41,7 +41,7 @@ export function createSettingWindow(): BrowserWindow {
     return settingWindow
   }
   const mainWindow = new BrowserWindow({
-    width: 800,
+    width: 850,
     height: 600,
     show: true,
     autoHideMenuBar: true,
