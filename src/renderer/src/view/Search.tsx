@@ -1,6 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { GET_DATA, OPEN_FILE, SET_WINDOW_SIZE } from '../../../common/const'
+import {
+  GET_DATA,
+  OPEN_FILE,
+  SET_WINDOW_SIZE,
+  WINDOW_BLUR,
+  WINDOW_SHOW
+} from '../../../common/const'
 import { SearchIcon } from '.././icons'
 import debounce from 'debounce'
 import pinyin from 'pinyin'
@@ -14,7 +20,7 @@ export const Search = () => {
     setActive(0)
     const search = e.target.value as string
     window.api.sendToMain(SET_WINDOW_SIZE, search ? 240 : 50)
-    if (!search) {
+    if (!search.trim()) {
       setFiles([])
       return
     }
@@ -27,19 +33,24 @@ export const Search = () => {
     setFiles(maths.slice(0, 6))
   }, 100)
   useEffect(() => {
-    window.api.interProcess(GET_DATA).then((value) => {
-      const datas: IData[] = JSON.parse(value)
-      const _files = datas.reduce((pre, data) => {
-        data.files.forEach((file) => {
-          pre.push({
-            ...file,
-            app: data.app
+    const update = () => {
+      window.api.interProcess(GET_DATA).then((value) => {
+        const datas: IData[] = JSON.parse(value)
+        const _files = datas.reduce((pre, data) => {
+          data.files.forEach((file) => {
+            pre.push({
+              ...file,
+              app: data.app
+            })
           })
-        })
-        return pre
-      }, [] as SearchFile[])
-      setAllFiles(_files)
-    })
+          return pre
+        }, [] as SearchFile[])
+        setAllFiles(_files)
+      })
+    }
+    window.api.onMain(WINDOW_SHOW, update)
+    window.api.onMain(WINDOW_BLUR, () => setFiles([]))
+    update()
   }, [])
   return (
     <div className="container min-w-sm">
@@ -66,7 +77,7 @@ export const Search = () => {
       <ul className="px-[10px] my-[6px]">
         {files.map((file, i) => (
           <li
-            className={`flex opacity-70  [&>svg]:mx-[6px] [&>svg]:w-[18px] [&>svg]:h-[18px] items-center  h-[30px] ${
+            className={`flex [&>svg]:mx-[6px] [&>svg]:w-[18px] [&>svg]:h-[18px] items-center  h-[30px] ${
               i === active ? 'active-li' : ''
             }`}
             key={file.filePath + i}

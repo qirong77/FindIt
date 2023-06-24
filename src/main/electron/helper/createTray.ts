@@ -5,6 +5,12 @@ export const createTray = (window: BrowserWindow) => {
   const tray = new Tray('/Users/qirong77/Documents/Code/projects/findIt/build/rocket.png')
   const contextMenu = Menu.buildFromTemplate([
     {
+      label: '显示搜索框 (Commend+F)',
+      click: () => {
+        window.show()
+      }
+    },
+    {
       label: '打开设置',
       click: () => {
         createSettingWindow()

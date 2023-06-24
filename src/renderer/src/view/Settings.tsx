@@ -33,7 +33,7 @@ export const Settings = () => {
               )}
             </span>
             <span
-              className="cursor-pointer w-[60%] overflow-hidden text-ellipsis"
+              className="cursor-pointer w-[60%] overflow-hidden  h-[28px]"
               onClick={() => {
                 window.api.interProcess(SELECT_FILES, 1).then((files) => {
                   const newDatas = deepCloneDatas()
@@ -64,9 +64,7 @@ export const Settings = () => {
                       <img className="h-[16px]" src={'data:image/png;base64,' + f.iconPath} />
                     )}
                   </span>
-                  <span className="w-[70%] overflow-hidden text-ellipsis">
-                    {f.fileName.replace('.app', '')}
-                  </span>
+                  <span className="w-[70%] h-[24px]">{f.fileName.replace('.app', '')}</span>
                   <span
                     className="cursor-pointer ml-auto"
                     onClick={() => {
