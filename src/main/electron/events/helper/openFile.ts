@@ -5,10 +5,12 @@ import { SearchFile } from '../../../../common/types'
 export const openFile = (e: Electron.IpcMainEvent, file: SearchFile) => {
   if (file.app.filePath.includes('Visual Studio Code')) {
     openFileWithVSCode(file.filePath)
+    getWindow(e)?.hide()
     return
   }
   let command = ''
   if (file.app.filePath) {
+    // mac默认打开文件命令
     command = `open -a "${file.app.filePath}" "${file.filePath}"`
   } else command = `open ${file.filePath}`
   exec(command, (error) => {
@@ -34,13 +36,26 @@ https://code.visualstudio.com/docs/setup/mac（如果你使用的是 macOS）
  */
 function openFileWithVSCode(filePath = '') {
   // 检查文件是否已经被打开
-  exec(`code --reuse-window "${filePath}"`, (error) => {
+  exec(`/usr/local/bin/code --reuse-window "${filePath}"`, (error) => {
     if (error) {
+      dialog.showErrorBox('error', JSON.stringify(error))
       // 文件未被打开，使用VS Code打开文件
-      exec(`code "${filePath}"`)
+      exec(`/usr/local/bin/code "${filePath}"`, (error) => {
+        dialog.showErrorBox('error', JSON.stringify(error))
+        if (error) {
+          console.error(`无法打开文件：${filePath}`, error)
+          // 处理错误的逻辑
+        }
+      })
     } else {
       // 文件已经被打开，激活窗口
-      exec(`code --goto "${filePath}"`)
+      exec(`/usr/local/bin/code --goto "${filePath}"`, (error) => {
+        if (error) {
+          dialog.showErrorBox('error', JSON.stringify(error))
+          console.error(`无法激活窗口：${filePath}`, error)
+          // 处理错误的逻辑
+        }
+      })
     }
   })
 }

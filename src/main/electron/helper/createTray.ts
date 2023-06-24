@@ -11,7 +11,7 @@ export const createTray = (window: BrowserWindow) => {
   const tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: '显示搜索框 (Commend+F)',
+      label: '显示搜索框  Commend+F',
       click: () => {
         window.show()
       }
@@ -26,12 +26,6 @@ export const createTray = (window: BrowserWindow) => {
       label: '退出App',
       click() {
         app.quit()
-      }
-    },
-    {
-      label: '重新加载查询数据',
-      click() {
-        console.log(window)
       }
     }
   ])
