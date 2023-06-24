@@ -1,8 +1,14 @@
-import { app, BrowserWindow, Menu, Tray } from 'electron'
+import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron'
 import { createSettingWindow } from './createWindow'
 
 export const createTray = (window: BrowserWindow) => {
-  const tray = new Tray('/Users/qirong77/Documents/Code/projects/findIt/build/rocket.png')
+  // 使用高分辨率图片,用@2x结尾
+  const image = nativeImage.createFromPath(
+    '/Users/qirong77/Documents/Code/projects/findIt/build/rocket-takeoff@2x.png'
+  )
+  // 自适应主题
+  image.setTemplateImage(true)
+  const tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '显示搜索框 (Commend+F)',
