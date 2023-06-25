@@ -34,10 +34,10 @@ export function createWindow(): BrowserWindow {
   }
   return mainWindow
 }
-let settingWindow: BrowserWindow
+let settingWindow: BrowserWindow | null
 export function createSettingWindow(): BrowserWindow {
   if (settingWindow) {
-    settingWindow.focus()
+    settingWindow?.focus()
     return settingWindow
   }
   const mainWindow = new BrowserWindow({
@@ -50,7 +50,9 @@ export function createSettingWindow(): BrowserWindow {
       sandbox: false
     }
   })
-
+  mainWindow.on('close', () => {
+    settingWindow = null
+  })
   mainWindow.webContents.on('dom-ready', () => {
     mainWindow.webContents.send(CHANGE_VIEW, '设置')
   })
