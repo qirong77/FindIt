@@ -9,12 +9,11 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .lh
-build
 out/main
 out/preload
 out/renderer/src
 out/renderer/index.html
-
+out/renderer/assets
 .vscode
 # Runtime data
 pids
