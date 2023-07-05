@@ -35,27 +35,25 @@ https://code.visualstudio.com/docs/setup/mac（如果你使用的是 macOS）
 或 https://code.visualstudio.com/docs/setup/linux（如果你使用的是 Linux）。
  */
 function openFileWithVSCode(filePath = '') {
-  // 检查文件是否已经被打开
-  exec(`/usr/local/bin/code --reuse-window "${filePath}"`, (error) => {
+  // 文件已经被打开，激活窗口
+  exec(`/usr/local/bin/code --goto "${filePath}"`, (error) => {
     if (error) {
       dialog.showErrorBox('error', JSON.stringify(error))
-      // 文件未被打开，使用VS Code打开文件
-      exec(`/usr/local/bin/code "${filePath}"`, (error) => {
-        dialog.showErrorBox('error', JSON.stringify(error))
-        if (error) {
-          console.error(`无法打开文件：${filePath}`, error)
-          // 处理错误的逻辑
-        }
-      })
-    } else {
-      // 文件已经被打开，激活窗口
-      exec(`/usr/local/bin/code --goto "${filePath}"`, (error) => {
-        if (error) {
-          dialog.showErrorBox('error', JSON.stringify(error))
-          console.error(`无法激活窗口：${filePath}`, error)
-          // 处理错误的逻辑
-        }
-      })
     }
   })
+  // // 检查文件是否已经被打开
+  // exec(`/usr/local/bin/code --reuse-window "${filePath}"`, (error) => {
+  //   if (error) {
+  //     dialog.showErrorBox('error', JSON.stringify(error))
+  //     // 文件未被打开，使用VS Code打开文件
+  //     exec(`/usr/local/bin/code "${filePath}"`, (error) => {
+  //       dialog.showErrorBox('error', JSON.stringify(error))
+  //       if (error) {
+  //         console.error(`无法打开文件：${filePath}`, error)
+  //         // 处理错误的逻辑
+  //       }
+  //     })
+  //   } else {
+  //   }
+  // })
 }
