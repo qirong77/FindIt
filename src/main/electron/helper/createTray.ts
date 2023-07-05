@@ -1,11 +1,13 @@
 import { app, BrowserWindow, Menu, nativeImage, Tray } from 'electron'
 import { createSettingWindow } from './createWindow'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 export const createTray = (window: BrowserWindow) => {
+  const __dirname = path.dirname(path.dirname(fileURLToPath(import.meta.url)))
+  const imagePath = path.join(__dirname, 'renderer', 'lib', 'rocket-takeoff@2x.png')
   // 使用高分辨率图片,用@2x结尾
-  const image = nativeImage.createFromPath(
-    '/Users/qirong77/Documents/Code/projects/findIt/build/rocket-takeoff@2x.png'
-  )
+  const image = nativeImage.createFromPath(imagePath)
   // 自适应主题
   image.setTemplateImage(true)
   const tray = new Tray(image)
