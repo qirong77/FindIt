@@ -22,7 +22,7 @@ export function createWindow(): BrowserWindow {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
-  mainWindow.webContents.on('dom-ready', () => {
+  mainWindow.webContents.on('did-frame-finish-load', () => {
     mainWindow.webContents.send(CHANGE_VIEW, '搜索')
   })
   // HMR for renderer base on electron-vite cli.
@@ -53,7 +53,7 @@ export function createSettingWindow(): BrowserWindow {
   mainWindow.on('close', () => {
     settingWindow = null
   })
-  mainWindow.webContents.on('dom-ready', () => {
+  mainWindow.webContents.on('did-frame-finish-load',()=>{
     mainWindow.webContents.send(CHANGE_VIEW, '设置')
   })
   settingWindow = mainWindow

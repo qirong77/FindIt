@@ -3,7 +3,7 @@ import { getWindow } from '../../utils/getWindow'
 import { dialog } from 'electron'
 import { SearchFile } from '../../../../common/types'
 export const openFile = (e: Electron.IpcMainEvent, file: SearchFile) => {
-  if (file.app.filePath.includes('Visual Studio Code')) {
+  if (file.app.filePath?.includes('Visual Studio Code')) {
     openFileWithVSCode(file.filePath)
     getWindow(e)?.hide()
     return
